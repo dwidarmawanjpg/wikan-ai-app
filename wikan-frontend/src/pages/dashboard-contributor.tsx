@@ -17,8 +17,6 @@ import {
   Trash2,        
   Edit,          
   FilePlus,
-  User,
-  Shield,
   LogOut,
   Moon,
   Sun,
