@@ -3,7 +3,7 @@ import { useTheme } from "../context/theme-context";
 import { useNavigate } from "react-router-dom";
 import logoWikanLight from "../assets/wikan-logo-light.svg";
 import logoWikanDark from "../assets/wikan-logo-dark.svg";
-import axios from "axios";
+import api from "../api";
 
 import { 
   FileText, 
@@ -92,7 +92,7 @@ const DashboardContributor = () => {
         const token = localStorage.getItem("wikan_token");
         if (!token) return; 
 
-        const response = await axios.get("http://127.0.0.1:8000/users/me", {
+        const response = await api.get("/users/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         
@@ -110,7 +110,7 @@ const DashboardContributor = () => {
         const token = localStorage.getItem("wikan_token");
         if (!token) return;
 
-        const docResponse = await axios.get("http://127.0.0.1:8000/documents/my-uploads", {
+        const docResponse = await api.get("/documents/my-uploads", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setMyDocuments(docResponse.data); 
@@ -125,7 +125,7 @@ const DashboardContributor = () => {
         const token = localStorage.getItem("wikan_token");
         if (!token) return;
 
-        const res = await axios.get("http://127.0.0.1:8000/contributor/activities", {
+        const res = await api.get("/contributor/activities", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setActivities(res.data);
@@ -159,7 +159,7 @@ const DashboardContributor = () => {
       formData.append("description", descInput);
       formData.append("file", selectedFile); 
 
-      await axios.post("http://127.0.0.1:8000/documents/upload", formData, {
+      await api.post("/documents/upload", formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data", 
@@ -193,7 +193,7 @@ const DashboardContributor = () => {
     try {
       const token = localStorage.getItem("wikan_token");
       
-      const response = await axios.delete(`http://127.0.0.1:8000/documents/${id}`, {
+      const response = await api.delete(`/documents/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.status === 200) {

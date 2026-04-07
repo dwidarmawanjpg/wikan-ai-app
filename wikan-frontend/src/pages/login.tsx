@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTheme } from "../context/theme-context";
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
-import axios from "axios";
+import api from "../api";
 
 // --- Schema Login ---
 const loginSchema = z.object({
@@ -42,7 +42,7 @@ const Login = () => {
       formData.append("username", data.email);
       formData.append("password", data.password);
 
-      const response = await axios.post<LoginResponse>("http://127.0.0.1:8000/auth/login", formData);
+      const response = await api.post<LoginResponse>("/auth/login", formData);
 
       const { access_token, token_type, role } = response.data;
 
@@ -69,7 +69,7 @@ const Login = () => {
   const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
     if (!credentialResponse.credential) return;
     try {
-      const res = await axios.post<LoginResponse>("http://127.0.0.1:8000/auth/google", {
+      const res = await api.post<LoginResponse>("/auth/google", {
         token: credentialResponse.credential,
       });
 

@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useTheme } from "../context/theme-context";
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
 import axios from "axios";
+import api from "../api";
 
 
 const registerSchema = z.object({
@@ -58,7 +59,7 @@ const RegisterUser = () => {
       };
 
       console.log("1. Melakukan Registrasi User...", registerPayload);
-      await axios.post("http://127.0.0.1:8000/auth/register", registerPayload);
+      await api.post("/auth/register", registerPayload);
 
       // --- AUTO LOGIN ---
       console.log("2. Registrasi Sukses. Melakukan Auto-Login...");
@@ -67,7 +68,7 @@ const RegisterUser = () => {
       loginFormData.append("username", data.email);
       loginFormData.append("password", data.password);
 
-      const loginResponse = await axios.post("http://127.0.0.1:8000/auth/login", loginFormData);
+      const loginResponse = await api.post("/auth/login", loginFormData);
 
       // --- SIMPAN TOKEN & BERSIHKAN SAMPAH ---
       const { access_token, token_type, role } = loginResponse.data;
@@ -110,7 +111,7 @@ const RegisterUser = () => {
   const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
     if (!credentialResponse.credential) return;
     try {
-      const res = await axios.post("http://127.0.0.1:8000/auth/google", {
+      const res = await api.post("/auth/google", {
         token: credentialResponse.credential,
       });
 

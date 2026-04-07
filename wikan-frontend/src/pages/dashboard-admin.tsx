@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/theme-context";
 import axios from "axios";
+import api from "../api";
 
 
 import { 
@@ -81,7 +82,7 @@ const DashboardAdmin = () => {
       const token = localStorage.getItem("wikan_token");
       if (!token) { navigate("/login"); return; }
 
-      const response = await axios.get("http://127.0.0.1:8000/admin/documents", {
+      const response = await api.get("/admin/documents", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setDocuments(response.data);
@@ -96,7 +97,7 @@ const DashboardAdmin = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem("wikan_token");
-      const response = await axios.get("http://127.0.0.1:8000/admin/users", {
+      const response = await api.get("/admin/users", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsersList(response.data);
@@ -109,7 +110,7 @@ const DashboardAdmin = () => {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem("wikan_token");
-      const response = await axios.get("http://127.0.0.1:8000/admin/stats", {
+      const response = await api.get("/admin/stats", {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAdminStats(response.data);
@@ -131,7 +132,7 @@ const DashboardAdmin = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("wikan_token");
-        const response = await axios.get("http://127.0.0.1:8000/users/me", {
+        const response = await api.get("/users/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserProfile(response.data);
@@ -157,8 +158,8 @@ const DashboardAdmin = () => {
     try {
       const token = localStorage.getItem("wikan_token");
 
-      const response = await axios.post(
-      `http://127.0.0.1:8000/admin/documents/${id}/decide?decision=${decision}`, 
+      const response = await api.post(
+      `/admin/documents/${id}/decide?decision=${decision}`, 
       {}, 
       { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -200,7 +201,7 @@ const DashboardAdmin = () => {
 
     try {
     const token = localStorage.getItem("wikan_token");
-    await axios.delete(`http://127.0.0.1:8000/documents/${id}`, {
+    await api.delete(`/documents/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     
@@ -226,7 +227,7 @@ const DashboardAdmin = () => {
     if (!window.confirm("Yakin ingin menghapus user ini secara permanen?")) return;
     try {
       const token = localStorage.getItem("wikan_token");
-      await axios.delete(`http://127.0.0.1:8000/admin/users/${userId}`, {
+      await api.delete(`/admin/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert("Pengguna berhasil dihapus.");
@@ -249,7 +250,7 @@ const DashboardAdmin = () => {
     try {
       const token = localStorage.getItem("wikan_token");
       await axios.post(
-        "http://127.0.0.1:8000/admin/users",
+        "/admin/users",
         {
           email: email,
           full_name: fullName,
@@ -270,7 +271,7 @@ const DashboardAdmin = () => {
   const handleBlockUser = async (userId: string) => {
     try {
       const token = localStorage.getItem("wikan_token");
-      const res = await axios.put(`http://127.0.0.1:8000/admin/users/${userId}/block`, {}, {
+      const res = await api.put(`/admin/users/${userId}/block`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert(res.data.message);
@@ -285,7 +286,7 @@ const DashboardAdmin = () => {
     if (!window.confirm("Yakin ingin mereset password pengguna ini menjadi 'wikan123'?")) return;
     try {
       const token = localStorage.getItem("wikan_token");
-      const res = await axios.put(`http://127.0.0.1:8000/admin/users/${userId}/reset-password`, {}, {
+      const res = await axios.put(`/admin/users/${userId}/reset-password`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert(res.data.message);
@@ -334,7 +335,7 @@ const DashboardAdmin = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("wikan_token");
-        const response = await axios.get("http://127.0.0.1:8000/users/me", {
+        const response = await api.get("/users/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserProfile(response.data);

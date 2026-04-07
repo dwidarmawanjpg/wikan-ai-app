@@ -4,6 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTheme } from "../context/theme-context";
 import axios from "axios";
+import api from "../api";
 
 
 const registerContributorSchema = z.object({
@@ -59,7 +60,7 @@ const RegisterContributor = () => {
       };
 
       console.log("1. Melakukan Registrasi...", registerPayload);
-      await axios.post("http://127.0.0.1:8000/auth/register", registerPayload);
+      await api.post("/auth/register", registerPayload);
 
       // --- AUTO LOGIN ---
       console.log("2. Registrasi Sukses. Melakukan Auto-Login...");
@@ -68,7 +69,7 @@ const RegisterContributor = () => {
       loginFormData.append("username", data.email);
       loginFormData.append("password", data.password);
 
-      const loginResponse = await axios.post("http://127.0.0.1:8000/auth/login", loginFormData);
+      const loginResponse = await api.post("/auth/login", loginFormData);
 
       // --- SIMPAN TOKEN & CEK ROLE ---
       const { access_token, token_type, role } = loginResponse.data;

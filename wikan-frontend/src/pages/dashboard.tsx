@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTheme } from "../context/theme-context";
 import logoWikanLight from "../assets/wikan-logo-light.svg";
 import logoWikanDark from "../assets/wikan-logo-dark.svg";
-import axios from "axios";
+import api, { API_BASE_URL } from "../api";
 
 
 
@@ -99,7 +99,7 @@ const Dashboard = () => {
     try {
       let response;
       if (isGuest) {
-        response = await fetch("http://127.0.0.1:8000/chat/guest", {
+        response = await fetch(`${API_BASE_URL}/chat/guest`, {
           method: "POST",
           headers: { 
             "Content-Type": "application/json"
@@ -110,7 +110,7 @@ const Dashboard = () => {
         });
       } else {
         const token = localStorage.getItem("wikan_token");
-        response = await fetch("http://127.0.0.1:8000/chat", {
+        response = await fetch(`${API_BASE_URL}/chat`, {
           method: "POST",
           headers: { 
             "Content-Type": "application/json",
@@ -170,7 +170,7 @@ const Dashboard = () => {
   const fetchSessionMessages = async (sessionId: string) => {
     try {
       const token = localStorage.getItem("wikan_token");
-      const res = await axios.get(`http://127.0.0.1:8000/chat/sessions/${sessionId}/messages`, {
+      const res = await api.get(`/chat/sessions/${sessionId}/messages`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessages(res.data);
@@ -220,12 +220,12 @@ const Dashboard = () => {
         const token = localStorage.getItem("wikan_token");
         if (!token) return;
 
-        const profileRes = await axios.get("http://127.0.0.1:8000/users/me", {
+        const profileRes = await api.get("/users/me", {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUserProfile(profileRes.data);
 
-        const sessionsRes = await axios.get("http://127.0.0.1:8000/chat/sessions", {
+        const sessionsRes = await api.get("/chat/sessions", {
           headers: { Authorization: `Bearer ${token}` }
         });
         setChatSessions(sessionsRes.data);
