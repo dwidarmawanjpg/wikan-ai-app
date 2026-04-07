@@ -1,0 +1,6 @@
+.env
+venv/
+__pycache__/
+*.pyc
+wikan_ai_memory/
+node_modules/
